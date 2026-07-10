@@ -4,8 +4,8 @@ import java.util.Scanner;
 
 public class ChatClient extends AbstractClient {
 
-    public ChatClient(String name) {
-        super(name);
+    public ChatClient(Student student) {
+        super(student);
         //TODO Auto-generated constructor stub
     }
     
@@ -23,7 +23,7 @@ public class ChatClient extends AbstractClient {
 
         Student student = new Student(studentId, name);
 
-        ChatClient chatClient = new ChatClient(student.getName());
+        ChatClient chatClient = new ChatClient(student);
         chatClient.run();
     }
 }

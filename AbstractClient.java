@@ -5,14 +5,15 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 public class AbstractClient {
-    private String name;        // 문자열 name 
     private Socket socket;      // 소켓 소켓
+    private Student student;
     private PrintWriter socketWriter;   // 작성하는거? socketWriter
     private BufferedReader socketReader;    // 버퍼리더? socketReader
     private BufferedReader keyboardReader;  // 버퍼리더? keyboardReader
 
-    public AbstractClient(String name){     // 생성자 name을 받아와서 생성
-        this.name = name;
+
+    public AbstractClient(Student student){     // 생성자 name을 받아와서 생성
+        this.student = student;
     }
 
     // 외부에서 나의 멤버 변수에 참조변수를 주입 할 수 있도록 setter 메서드 설계
@@ -24,6 +25,7 @@ public class AbstractClient {
         try{
             connectToServer();      // 서버에 연결
             setupStreams();         // 셋업 스트림?
+            sendLoginMessage();
             startService();     // join() 걸어 둔 상태  서버 시작
         } catch (IOException e){
             System.out.println(">>> 접속 종료 <<<");        // 실패하면 접속종료를 띄움
@@ -63,7 +65,7 @@ public class AbstractClient {
             try {
                 String msg;     // msg 문자열
                 while ((msg = keyboardReader.readLine()) != null) {     // 키보드에서 한줄 씩 읽은게 null이 아니면 반복
-                    socketWriter.println("[" + name + "] : " + msg);        // socketWriter에게 [name] : 읽어들인 값 형식으로 출력?
+                    socketWriter.println("[" + student.getName() + "] : " + msg);        // socketWriter에게 [name] : 읽어들인 값 형식으로 출력?
                 }
             } catch (IOException e){
                 e.printStackTrace();        // 몰라
@@ -92,5 +94,17 @@ public class AbstractClient {
                 e.printStackTrace();        // 몰라
             }
         }
+    }
+
+    private void sendLoginMessage(){
+        String studentId = student.getStudentId();
+        String name = student.getName(); 
+
+        String loginMessage = "Login|" + student.getStudentId()  + "|" + student.getName();
+        socketWriter.println(loginMessage);     // socketWriter는 채팅 서버로 보낼 때 사용하는 PrintWriter
+    }
+
+    private void sendLoginMesssage(){
+        socketWriter.println(("Login|" + student.getStudentId() + "|" + student.getName()));
     }
 }
