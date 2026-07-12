@@ -3,7 +3,7 @@ public class Student {
     private String name;
 
     public Student(String name){
-        this(name,"미입력");
+        this("미입력","미입력");
     }
 
     public Student(String studentId, String name){
