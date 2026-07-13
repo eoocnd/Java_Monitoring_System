@@ -36,6 +36,7 @@ public class MultiClientServer {
         private Socket socket;
         private PrintWriter out;
         private BufferedReader in;
+        private Student student;
         public ClientHandler(Socket socket){    
             this.socket = socket;
         }
@@ -53,7 +54,7 @@ public class MultiClientServer {
                         String[] data = msg.split("\\|");
                         String studentId = data[1];
                         String name = data[2];
-                        Student student = new Student(studentId, name);
+                        student = new Student(studentId, name);
                         students.add(student);
 
                         int i = 1;
@@ -77,7 +78,20 @@ public class MultiClientServer {
             } finally {
                 try{
                     socket.close();     // 종료
+                    if (student != null){
+                        students.remove(student);
+                        System.out.println(student.getName() + "퇴장");
+                    }
                     System.out.println("연결 해제 ... ");
+
+                int i = 1;
+                System.out.println("    현재 접속 학생    ");
+                for (Student s : students){
+                    System.out.println(
+                        "[" + i + "] " + s.getStudentId() + " " + s.getName()
+                    );
+                    i++;
+                }
                 } catch (Exception e2) {
                     // e2.printStackTrace();
                 }
