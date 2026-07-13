@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 public class MultiClientServer {
-    private static ArrayList<Student> students = new ArrayList<>();
+    private static StudentManager studentManager = new StudentManager();
     public static final int Port = 5000;    // 정적 정수 변수인 Port에 5000 값을 저장
     // 하나의 변수에 자원을 통으로 관리하기 기법 --> 자료구조
     // 자료구조 --> 코드 단일, 멀티 --> 멀티 스레드 --> 자료구조 ??
@@ -55,17 +55,9 @@ public class MultiClientServer {
                         String studentId = data[1];
                         String name = data[2];
                         student = new Student(studentId, name);
-                        students.add(student);
+                        studentManager.addStudent(student);
 
-                        int i = 1;
-                        System.out.println("    현재 접속 학생    ");
-                        for (Student s : students){
-                            System.out.println(
-                                "[" + i + "] " + s.getStudentId() + " " + s.getName()
-                            );
-                            i++;
-                        }
-                        System.out.println("=============");
+                        studentManager.printStudents();
 
                         continue;
                     }
@@ -79,19 +71,13 @@ public class MultiClientServer {
                 try{
                     socket.close();     // 종료
                     if (student != null){
-                        students.remove(student);
+                        studentManager.removeStudent(student);
                         System.out.println(student.getName() + "퇴장");
                     }
                     System.out.println("연결 해제 ... ");
 
-                int i = 1;
-                System.out.println("    현재 접속 학생    ");
-                for (Student s : students){
-                    System.out.println(
-                        "[" + i + "] " + s.getStudentId() + " " + s.getName()
-                    );
-                    i++;
-                }
+                    studentManager.printStudents();
+
                 } catch (Exception e2) {
                     // e2.printStackTrace();
                 }
