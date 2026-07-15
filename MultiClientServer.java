@@ -61,6 +61,11 @@ public class MultiClientServer {
 
                         continue;
                     }
+
+                    if (msg.startsWith("Heatbeat|")){
+                        System.out.println(msg);
+                        continue;
+                    }
                     System.out.println(msg);        
                     // 받은 데이터를 서버측과 연결된 데이터를 전달하자
                     broadcastMessage(msg);     
@@ -91,4 +96,5 @@ public class MultiClientServer {
             writer.println(message);        
         }
     }
+
 }

@@ -44,15 +44,18 @@ public class AbstractClient {
     }
 
     private void startService() throws IOException {        
-        Thread readThread = createReadThread();     
-        Thread writeThread = createWriteThread();       
+        Thread readThread = createReadThread();     // 읽기 쓰레드   
+        Thread writeThread = createWriteThread();   // 쓰기 쓰레드
+        Thread heartbeatThread = createHeartbeatThread();   // Heartbeat 쓰레드
 
         readThread.start();     
-        writeThread.start();    
+        writeThread.start();
+        heartbeatThread.start();
         //  메인 스레드 대기 처리
         try{
             readThread.join();  
-            writeThread.join(); 
+            writeThread.join();
+            heartbeatThread.join();
         } catch (InterruptedException e){
 
         }
@@ -85,6 +88,26 @@ public class AbstractClient {
         });
     }
 
+    private Thread createHeartbeatThread() {
+        return new Thread(() -> {
+
+            try {
+                while (true) {
+
+                    socketWriter.println(
+                        "HEARTBEAT|" + student.getStudentId()
+                    );
+
+                    Thread.sleep(5000);
+
+                }
+            } catch (Exception e) {
+
+            }
+
+        });
+    }
+
     private void cleanup(){     
         if (socket != null){
             try {
@@ -106,4 +129,5 @@ public class AbstractClient {
     private void sendLoginMesssage(){
         socketWriter.println(("Login|" + student.getStudentId() + "|" + student.getName()));
     }
+
 }
