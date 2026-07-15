@@ -20,4 +20,13 @@ public class StudentManager {
         }
         System.out.println("--------------------");
     }
+
+    public Student findStudent(String studentId){
+        for (Student student : students){
+            if (student.getStudentId().equals(studentId)){
+                return student;
+            }
+        }
+        return null;
+    }
 }

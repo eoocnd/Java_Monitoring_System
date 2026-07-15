@@ -51,19 +51,12 @@ public class MultiClientServer {
                 String msg;
                 while ((msg = in.readLine()) != null){          
                     if (msg.startsWith("Login|")){
-                        String[] data = msg.split("\\|");
-                        String studentId = data[1];
-                        String name = data[2];
-                        student = new Student(studentId, name);
-                        studentManager.addStudent(student);
-
-                        studentManager.printStudents();
-
+                        handleLogin(msg);
                         continue;
                     }
 
                     if (msg.startsWith("Heatbeat|")){
-                        System.out.println(msg);
+                        handleHeartbeat(msg);
                         continue;
                     }
                     System.out.println(msg);        
@@ -88,6 +81,33 @@ public class MultiClientServer {
                 }
             }
         }
+
+        // 접속 관리
+        private void handleLogin(String msg){
+            String[] data = msg.split("\\|");
+            String studentId = data[1];
+            String name = data[2];
+            student = new Student(studentId, name);
+            studentManager.addStudent(student);
+    
+            studentManager.printStudents();
+        }
+
+        // 하트비트 관리
+        private void handleHeartbeat(String msg){
+            System.out.println(msg);
+
+        }
+
+        // 이벤트 관리
+        private void handleEvent(String msg){
+            String[] data = msg.split("\\|");
+            String studentId = data[1];
+            String eventType = data[2];
+
+            System.out.println(studentId + " : " + eventType);
+        }
+    
     }   // end of ClientHandler
 
     // 모든 클라이언트에게 메시지 보내기 - 브로드 캐스트
@@ -96,5 +116,6 @@ public class MultiClientServer {
             writer.println(message);        
         }
     }
+
 
 }

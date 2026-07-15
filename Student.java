@@ -1,6 +1,7 @@
 public class Student {
     private String studentId;
     private String name;
+    private int warningScore;
 
     public Student(String name){
         this("미입력","미입력");

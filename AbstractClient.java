@@ -130,4 +130,13 @@ public class AbstractClient {
         socketWriter.println(("Login|" + student.getStudentId() + "|" + student.getName()));
     }
 
+    private void sendEvent(String event){
+        socketWriter.println(
+            "Event|"
+            + student.getStudentId()
+            + "|"
+            + event
+        );
+    }
+
 }
