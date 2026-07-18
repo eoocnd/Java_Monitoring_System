@@ -1,3 +1,4 @@
+package test;
 import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.Rectangle;
