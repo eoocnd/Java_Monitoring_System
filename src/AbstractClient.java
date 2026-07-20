@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -66,8 +67,13 @@ public class AbstractClient {
         return new Thread(() -> {        
             try {
                 String msg;     
-                while ((msg = keyboardReader.readLine()) != null) {     
-                    socketWriter.println("[" + student.getName() + "] : " + msg);       
+                while ((msg = keyboardReader.readLine()) != null) {  
+                    if (msg.equals("/copy")){
+                        sendEvent(EventType.COPY);
+                        continue;
+                    }   
+
+                    socketWriter.println("[" + student.getName() + "] : " + msg );
                 }
             } catch (IOException e){
                 e.printStackTrace();       
@@ -95,7 +101,7 @@ public class AbstractClient {
                 while (true) {
 
                     socketWriter.println(
-                        "HEARTBEAT|" + student.getStudentId()
+                        "Heartbeat|" + student.getStudentId()
                     );
 
                     Thread.sleep(5000);
@@ -126,17 +132,30 @@ public class AbstractClient {
         socketWriter.println(loginMessage);     
     }
 
-    private void sendLoginMesssage(){
-        socketWriter.println(("Login|" + student.getStudentId() + "|" + student.getName()));
+    public void sendEvent(EventType eventType){
+        String message = 
+                "Event|" +
+                student.getStudentId() +
+                "|" +
+                eventType;
+
+        socketWriter.println(message);
+
+        // COPY 이벤트면 즉시 캡처 후 업로드
+        if (eventType == EventType.COPY){
+            CaptureManager captureManager = new CaptureManager();
+            File image = captureManager.capture();
+            if (image != null){
+                UploadManager uploadManager = new UploadManager();
+                uploadManager.upload(student, image);
+            }
+        }
     }
 
-    private void sendEvent(String event){
-        socketWriter.println(
-            "Event|"
-            + student.getStudentId()
-            + "|"
-            + event
-        );
+    public enum EventType{
+        COPY,
+        AI_SITE,
+        SCREEN_CAPTURE
     }
 
 }

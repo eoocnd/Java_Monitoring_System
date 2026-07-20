@@ -25,5 +25,7 @@ public class ChatClient extends AbstractClient {
 
         ChatClient chatClient = new ChatClient(student);
         chatClient.run();
+
+        chatClient.sendEvent(EventType.COPY);
     }
 }

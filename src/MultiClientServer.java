@@ -37,6 +37,7 @@ public class MultiClientServer {
         private PrintWriter out;
         private BufferedReader in;
         private Student student;
+        
         public ClientHandler(Socket socket){    
             this.socket = socket;
         }
@@ -55,8 +56,13 @@ public class MultiClientServer {
                         continue;
                     }
 
-                    if (msg.startsWith("Heatbeat|")){
+                    if (msg.startsWith("Heartbeat|")){
                         handleHeartbeat(msg);
+                        continue;
+                    }
+
+                    if (msg.startsWith("Event|")){
+                        handleEvent(msg);
                         continue;
                     }
                     System.out.println(msg);        
@@ -106,6 +112,9 @@ public class MultiClientServer {
             String eventType = data[2];
 
             System.out.println(studentId + " : " + eventType);
+            if (eventType.equals("COPY")){
+                System.out.println("[" + studentId + "] 화면 캡처 이벤트 발생");
+            }
         }
     
     }   // end of ClientHandler
