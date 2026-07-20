@@ -16,7 +16,7 @@ public class ImageSenderTest {
             OutputStream outputStream = socket.getOutputStream();   // OutputStream 얻기
             System.out.println("이미지 전송 시작");
             
-            File file = new File("capture.png");    // 파일 열기
+            File file = new File("captures/capture.png");    // 파일 열기
             FileInputStream fileInputStream = new FileInputStream(file);    // capture.png -> 읽기 시작
 
             byte[] buffer = new byte[4096];

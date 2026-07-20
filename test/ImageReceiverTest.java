@@ -16,7 +16,7 @@ public class ImageReceiverTest {
             System.out.println("클라이언트 접속");
 
             InputStream inputStream = socket.getInputStream();  // 소켓에서 데이터를 읽는다.
-            FileOutputStream fileOutputStream = new FileOutputStream("receive.png");    // 파일 생성
+            FileOutputStream fileOutputStream = new FileOutputStream("captures/receive.png");    // 파일 생성
             byte[] buffer = new byte[4096];         // 4096Byte씩 쪼개 읽음
             int length;     // 읽은 크기 저장
             while((length = inputStream.read(buffer)) != -1){   // 더 이상 읽을 게 없을 때까지 반복
