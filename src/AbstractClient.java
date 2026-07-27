@@ -48,6 +48,12 @@ public class AbstractClient {
         Thread readThread = createReadThread();     // 읽기 쓰레드   
         Thread writeThread = createWriteThread();   // 쓰기 쓰레드
         Thread heartbeatThread = createHeartbeatThread();   // Heartbeat 쓰레드
+        
+        ClipboardMonitor clipboardMonitor = new ClipboardMonitor();
+        clipboardMonitor.start();
+        
+        ActiveWindowMonitor activeWindowMonitor = new ActiveWindowMonitor(student);
+        activeWindowMonitor.start();
 
         readThread.start();     
         writeThread.start();
