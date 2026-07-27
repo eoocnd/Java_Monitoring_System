@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ClipboardMonitor {
-    private String previousText = "";   // 이전 클립보드 내용 저장 
+    private String previousText = null;   // 이전 클립보드 내용 저장 
     private ScheduledExecutorService scheduler; // 일정 시간이 되면 어떤 작업을 해주는 관리자
 
     public void checkClipboard(){       // 현재 저장된 클립보드 값을 가져옴
@@ -19,10 +19,9 @@ public class ClipboardMonitor {
         String text;
         try {
             text = (String) contents.getTransferData(DataFlavor.stringFlavor);
-            System.out.println(text);
 
             if (!text.equals(previousText)) {       // 이전 클립보드랑 같으면 변경 감지, 갱신, 출력
-                System.out.println("클립보드 변경");
+                System.out.println("[클립보드 변경]");
                 System.out.println(text);
 
                 previousText = text;

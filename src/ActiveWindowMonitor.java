@@ -32,7 +32,7 @@ public class ActiveWindowMonitor {
 
         String title = Native.toString(windowText);
         if (!title.equals(previousTitle)){
-            System.out.println("활성 창 변경");
+            System.out.println("[활성 창 변경]");
             System.out.println(title);
             
             if (title.contains("ChatGPT") 
