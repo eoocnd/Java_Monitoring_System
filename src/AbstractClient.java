@@ -11,6 +11,7 @@ public class AbstractClient {
     private PrintWriter socketWriter;   
     private BufferedReader socketReader;    
     private BufferedReader keyboardReader;  
+    private StudentSessionManager sessionManager;
 
 
     public AbstractClient(Student student){     
@@ -27,6 +28,8 @@ public class AbstractClient {
             connectToServer();      
             setupStreams();         
             sendLoginMessage();
+            sessionManager = new StudentSessionManager(student);
+            sessionManager.createSession();
             startService();     
         } catch (IOException e){
             System.out.println(">>> 접속 종료 <<<");        
@@ -51,9 +54,13 @@ public class AbstractClient {
         
         ClipboardMonitor clipboardMonitor = new ClipboardMonitor();
         clipboardMonitor.start();
-        
-        ActiveWindowMonitor activeWindowMonitor = new ActiveWindowMonitor(student);
-        activeWindowMonitor.start();
+
+        try{
+            ActiveWindowMonitor activeWindowMonitor = new ActiveWindowMonitor(student);
+            activeWindowMonitor.start();
+        } catch (Throwable e){
+            System.out.println("ActiveWindowMonitor 시작 실패");
+        }
 
         readThread.start();     
         writeThread.start();
@@ -69,7 +76,7 @@ public class AbstractClient {
 
     }
 
-    private Thread createWriteThread() {        
+    private Thread createWriteThread() {              
         return new Thread(() -> {        
             try {
                 String msg;     
@@ -87,7 +94,7 @@ public class AbstractClient {
         });
     }
 
-    private Thread createReadThread() {     
+    private Thread createReadThread() {         
         return new Thread(() -> {       
             try {
                 String msg;    
@@ -100,7 +107,7 @@ public class AbstractClient {
         });
     }
 
-    private Thread createHeartbeatThread() {
+    private Thread createHeartbeatThread() {        // 하트비트 스레드 생성
         return new Thread(() -> {
 
             try {
@@ -130,7 +137,7 @@ public class AbstractClient {
         }
     }
 
-    private void sendLoginMessage(){
+    private void sendLoginMessage(){            // 로그인 성공 메세지
         String studentId = student.getStudentId();
         String name = student.getName(); 
 
@@ -138,7 +145,7 @@ public class AbstractClient {
         socketWriter.println(loginMessage);     
     }
 
-    public void sendEvent(EventType eventType){
+    public void sendEvent(EventType eventType){     // 이벤트 
         String message = 
                 "Event|" +
                 student.getStudentId() +
@@ -150,18 +157,13 @@ public class AbstractClient {
         // COPY 이벤트면 즉시 캡처 후 업로드
         if (eventType == EventType.COPY){
             CaptureManager captureManager = new CaptureManager();
-            File image = captureManager.capture();
+            File image = sessionManager.createCaptureFile(EventType.COPY);
+            captureManager.capture(image);
             if (image != null){
                 UploadManager uploadManager = new UploadManager();
                 uploadManager.upload(student, image);
             }
         }
-    }
-
-    public enum EventType{
-        COPY,
-        AI_SITE,
-        SCREEN_CAPTURE
     }
 
 }

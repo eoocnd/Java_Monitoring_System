@@ -8,7 +8,7 @@ import java.io.File;
 import javax.imageio.ImageIO;
 
 public class CaptureManager {
-    public File capture(){
+    public File capture(File file){
         try {
             Robot robot = new Robot();
 
@@ -17,7 +17,6 @@ public class CaptureManager {
             
             BufferedImage image = robot.createScreenCapture(rectangle); // Robot -> Rectangle 영역 촬영 -> 사진 생성
 
-            File file = new File("captures/capture.png");
             ImageIO.write(image, "png", file);
 
             System.out.println("캡처 완료");
