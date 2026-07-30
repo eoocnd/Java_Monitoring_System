@@ -54,6 +54,10 @@ public class AbstractClient {
         Thread heartbeatThread = createHeartbeatThread();   // Heartbeat 쓰레드
         
         ClipboardMonitor clipboardMonitor = new ClipboardMonitor();
+        
+        AutoCaptureManager autoCaptureManager = new AutoCaptureManager(this);
+        Thread autoCaptureThread = new Thread(autoCaptureManager);
+        
         clipboardMonitor.start();
 
         try{
@@ -62,7 +66,10 @@ public class AbstractClient {
         } catch (Throwable e){
             System.out.println("ActiveWindowMonitor 시작 실패");
         }
-
+        
+        autoCaptureThread.start();      // implements Runnable로 일만 정의하기 때문에 실제로 일하는 건 new Thread이다. 
+        
+        
         readThread.start();     
         writeThread.start();
         heartbeatThread.start();
@@ -71,6 +78,7 @@ public class AbstractClient {
             readThread.join();  
             writeThread.join();
             heartbeatThread.join();
+            autoCaptureThread.join();
         } catch (InterruptedException e){
 
         }
@@ -155,7 +163,7 @@ public class AbstractClient {
 
         socketWriter.println(message);
 
-        saveCapture(eventType);
+        saveCapture(eventType); 
 
         }
 
@@ -164,20 +172,25 @@ public class AbstractClient {
             CaptureManager captureManager = new CaptureManager();
             File image = captureManager.capture(sessionManager.createCaptureFile(eventType));
             
-            if (image != null){
-                UploadManager uploadManager = new UploadManager();
-                uploadManager.upload(student, image);
+            if (image == null){
+                return;
             }
 
             // json
             String jsonName = image.getName();
             jsonName = jsonName.replace(".png",".json");
             File jsonFile = new File(image.getParent(), jsonName);
-
+            
             CaptureMetadata metadata = new CaptureMetadata(student.getStudentId(), student.getName(), LocalDateTime.now().toString(), 
-                eventType.name(), ActiveWindowMonitor.getCurrentWindow(), ClipboardMonitor.getCurrentClipboard(), image.getName());
+            eventType.name(), ActiveWindowMonitor.getCurrentWindow(), ClipboardMonitor.getCurrentClipboard(), image.getName());
             
             JsonManager jsonManager = new JsonManager();
             jsonManager.save(metadata, jsonFile);
+
+            // // 업로드
+            // if (image != null){
+            //     UploadManager uploadManager = new UploadManager();
+            //     uploadManager.upload(student, image);
+            // }
         }
 }

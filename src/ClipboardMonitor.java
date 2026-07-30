@@ -26,6 +26,7 @@ public class ClipboardMonitor {
                 System.out.println(text);
 
                 previousText = text;
+                currentClipboard = text;
             }
 
         } catch (Exception e) {

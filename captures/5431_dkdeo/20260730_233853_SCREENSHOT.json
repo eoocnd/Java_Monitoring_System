@@ -1,0 +1,9 @@
+{
+  "studentId" : "5431",
+  "studentName" : "dkdeo",
+  "captureTime" : "2026-07-30T23:38:53.526886900",
+  "eventType" : "SCREENSHOT",
+  "windowTitle" : "자바 실기 시험 프로그램 - Chrome",
+  "clipboard" : "// UploadManager uploadManager = new UploadManager();\n// uploadManager.upload(student, image);",
+  "imageFileName" : "20260730_233853_SCREENSHOT.png"
+}
