@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDateTime;
 
 public class AbstractClient {
     private Socket socket;      
@@ -156,14 +157,26 @@ public class AbstractClient {
 
         // COPY 이벤트면 즉시 캡처 후 업로드
         if (eventType == EventType.COPY){
+            // 이미지
             CaptureManager captureManager = new CaptureManager();
-            File image = sessionManager.createCaptureFile(EventType.COPY);
-            captureManager.capture(image);
+            File image = captureManager.capture(sessionManager.createCaptureFile(eventType.COPY));
+            
+            // json
+            String jsonName = image.getName();
+            jsonName = jsonName.replace(".png",".json");
+            File jsonFile = new File(image.getParent(), jsonName);
+
+            CaptureMetadata metadata = new CaptureMetadata(student.getStudentId(), student.getName(), LocalDateTime.now().toString(), eventType.name(), ActiveWindowMonitor.getCurrentWindow(), ClipboardMonitor.getCurrentClipboard(), image.getName());
+            
+            JsonManager jsonManager = new JsonManager();
+            jsonManager.save(metadata, jsonFile);
+            
             if (image != null){
                 UploadManager uploadManager = new UploadManager();
                 uploadManager.upload(student, image);
             }
         }
+
     }
 
 }

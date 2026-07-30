@@ -10,6 +10,7 @@ public class ActiveWindowMonitor {
     private Student student;
     private String previousTitle = "";
     private ScheduledExecutorService scheduler;
+    private static String currentWindow = "";
 
     public ActiveWindowMonitor(Student student){
         this.student = student;
@@ -41,6 +42,7 @@ public class ActiveWindowMonitor {
                 System.out.println("AI 사이트 감지");}
         }
         previousTitle = title;
+        currentWindow = title;
     }
 
     public void start(){
@@ -51,5 +53,9 @@ public class ActiveWindowMonitor {
             0, 
             500, 
             TimeUnit.MILLISECONDS);   
+    }
+
+    public static String getCurrentWindow(){
+        return currentWindow;
     }
 }
