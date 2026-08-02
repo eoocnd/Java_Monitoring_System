@@ -1,9 +1,0 @@
-{
-  "studentId" : "521123",
-  "studentName" : "gkans",
-  "captureTime" : "2026-07-30T23:38:44.798805600",
-  "eventType" : "SCREENSHOT",
-  "windowTitle" : "자바 실기 시험 프로그램 - Chrome",
-  "clipboard" : "java -cp \"src;lib/*\" ChatClient",
-  "imageFileName" : "20260730_233844_SCREENSHOT.png"
-}

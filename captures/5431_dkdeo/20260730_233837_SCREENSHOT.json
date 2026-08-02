@@ -1,9 +1,0 @@
-{
-  "studentId" : "5431",
-  "studentName" : "dkdeo",
-  "captureTime" : "2026-07-30T23:38:37.304402100",
-  "eventType" : "SCREENSHOT",
-  "windowTitle" : "AbstractClient.java - Java_Monitoring_System-main - Visual Studio Code",
-  "clipboard" : "java -cp \"src;lib/*\" ChatClient",
-  "imageFileName" : "20260730_233837_SCREENSHOT.png"
-}

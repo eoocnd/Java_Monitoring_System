@@ -1,9 +1,0 @@
-{
-  "studentId" : "521123",
-  "studentName" : "gkans",
-  "captureTime" : "2026-07-30T23:38:57.897466300",
-  "eventType" : "SCREENSHOT",
-  "windowTitle" : "AbstractClient.java - Java_Monitoring_System-main - Visual Studio Code",
-  "clipboard" : "// UploadManager uploadManager = new UploadManager();\n// uploadManager.upload(student, image);",
-  "imageFileName" : "20260730_233857_SCREENSHOT.png"
-}

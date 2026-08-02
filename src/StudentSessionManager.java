@@ -33,7 +33,7 @@ public class StudentSessionManager {
 
         String time = now.format(formatter);
 
-        String fileName = time + "_" + eventType.name() + ".png";
+        String fileName = time + "_" + eventType.name() + ".jpg";
 
         return new File(sessionFolder, fileName);
     }

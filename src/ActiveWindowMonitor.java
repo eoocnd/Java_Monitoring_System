@@ -8,12 +8,14 @@ import java.util.concurrent.TimeUnit;
 
 public class ActiveWindowMonitor {
     private Student student;
+    private AbstractClient client;
     private String previousTitle = "";
     private ScheduledExecutorService scheduler;
     private static String currentWindow = "";
 
-    public ActiveWindowMonitor(Student student){
+    public ActiveWindowMonitor(Student student, AbstractClient client){
         this.student = student;
+        this.client = client;
     }
 
     public interface User32 extends StdCallLibrary{
@@ -35,11 +37,17 @@ public class ActiveWindowMonitor {
         if (!title.equals(previousTitle)){
             System.out.println("[활성 창 변경]");
             System.out.println(title);
+
+            // 창이 바뀌면 ALT + TAB 이벤트 젖방
+            client.sendEvent(EventType.ALT_TAB);
             
+            // Ai 사이트 감지
             if (title.contains("ChatGPT") 
                 || title.contains("Gemini") 
                 || title.contains("Claude")){
                 System.out.println("AI 사이트 감지");}
+
+            client.sendEvent(EventType.PROCESS);    // PROCESS 이벤트 저장
         }
         previousTitle = title;
         currentWindow = title;

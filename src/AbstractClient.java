@@ -13,6 +13,7 @@ public class AbstractClient {
     private BufferedReader socketReader;    
     private BufferedReader keyboardReader;  
     private StudentSessionManager sessionManager;
+    private long lastCaptureTime = 0;
 
 
     public AbstractClient(Student student){     
@@ -60,8 +61,11 @@ public class AbstractClient {
         
         clipboardMonitor.start();
 
+        KeyboardMonitor keyboardMonitor = new KeyboardMonitor(this);
+        keyboardMonitor.start();
+
         try{
-            ActiveWindowMonitor activeWindowMonitor = new ActiveWindowMonitor(student);
+            ActiveWindowMonitor activeWindowMonitor = new ActiveWindowMonitor(student, this);
             activeWindowMonitor.start();
         } catch (Throwable e){
             System.out.println("ActiveWindowMonitor 시작 실패");
@@ -168,6 +172,13 @@ public class AbstractClient {
         }
 
     public void saveCapture(EventType eventType){
+        // 중복 캡처 방지(1초안에 또 캡쳐 되는걸 막음)
+        long now = System.currentTimeMillis();
+        if (now - lastCaptureTime < 1000){
+            return;
+        }
+        lastCaptureTime = now;
+        
             // 이미지
             CaptureManager captureManager = new CaptureManager();
             File image = captureManager.capture(sessionManager.createCaptureFile(eventType));
